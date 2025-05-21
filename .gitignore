@@ -1,0 +1,38 @@
+# Node modules
+node_modules/
+
+# Yarn lock file (optional if you use only yarn)
+package-lock.json
+
+# Environment variables
+.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# IDE-specific
+.vscode/
+.idea/
+
+# Coverage and build output
+coverage/
+dist/
+
+# Debug files
+*.local
+*.swo
+*.swp
+
+# Optional: if you use nodemon
+.nodemon-debug.json
+
+# MongoDB dump files (if any)
+dump/
