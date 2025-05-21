@@ -1,25 +1,17 @@
 const express = require('express');
 const app = express();
 require('dotenv').config();
-
+const bodyParser = require('body-parser')
 const database = require('./config/database');
 const port = process.env.PORT || 8686;
 database.connectDB();
-const Task = require('./models/task.model');
-app.get("/", (req, res) => {
-  res.send("Hello world");
-});
-app.get('/tasks', async (req, res) => {
-  const tasks = await Task.find({ deleted: false });
-  res.json(tasks);
-});
+const systemConfig = require("./config/system"); 
+app.use(bodyParser.json()); // when post data can parse json into req.body
 
 
-app.get("/tasks/detail/:id", async (req, res) => {
-  const taskId = req.params.id;
-  const task = await Task.findOne({ _id: taskId, deleted: false });
-  res.json(task);
-})
+const routesApiVer1 = require("./api/v1/routes/index.route")
+
+routesApiVer1(app); 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
