@@ -1,6 +1,7 @@
 const { Cursor } = require("mongoose");
 const Task = require("../models/task.model");
 const paginationHelper = require("../helpers/pagination")
+const searchHelper = require("../helpers/search")
 module.exports.index = async (req, res) => {
 
   let find = {
@@ -31,6 +32,16 @@ module.exports.index = async (req, res) => {
   const countTasks = await Task.countDocuments(find);
   const objectPagination = paginationHelper(initPagination, req.query, countTasks);
   // Pagination
+
+
+  // search
+
+  let objectSearch = searchHelper(req.query);
+  if (req.query.keyword) {
+    find.title = objectSearch.regex;
+  }
+  // end search
+
   const task = await Task.find(find).sort(sort)
     .skip(objectPagination.skip)
     .limit(objectPagination.limitItems)
