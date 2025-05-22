@@ -8,4 +8,8 @@ router.get("/detail/:id", taskController.detail);
 router.patch(
   "/change-status/:id", taskController.changeStatus
 )
+
+router.patch("/change-multi", taskController.changeMulti)
+
+router.post("/create", taskController.createPost)
 module.exports = router;

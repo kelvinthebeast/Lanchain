@@ -7,7 +7,7 @@ const port = process.env.PORT || 8686;
 database.connectDB();
 const systemConfig = require("./config/system"); 
 app.use(bodyParser.json()); // when post data can parse json into req.body
-
+app.use(express.urlencoded({ extended: true }));
 
 const routesApiVer1 = require("./api/v1/routes/index.route")
 
