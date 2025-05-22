@@ -61,3 +61,26 @@ module.exports.detail = async (req, res) => {
 
   res.json(task);
 }
+
+module.exports.changeStatus = async (req, res) => {
+  try {
+    const taskId = req.params.id;
+    const status = req.body.status;
+    await Task.updateOne({
+      _id: taskId
+    }, {
+      status: status
+    }) 
+    res.json({
+      code: 200,
+      message: "Cập nhập trạng thái thành công"
+    })
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Không tìm thấy sản phẩm"
+    })
+    
+  }
+  
+}
