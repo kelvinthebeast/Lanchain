@@ -23,7 +23,8 @@ module.exports.register = async (req, res) => {
     const user = new User({
       fullName: req.body.fullName,
       password: req.body.password,
-      email: req.body.email
+      email: req.body.email,
+      token: generateHelper.generateRandomString(8)
     })
 
 
