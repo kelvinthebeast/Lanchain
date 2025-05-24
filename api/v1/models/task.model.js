@@ -15,6 +15,8 @@ const taskSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
+  listUser: Array,
+  createdBy: String,
   deleted: {
     type: Boolean,
     default: false

@@ -5,6 +5,12 @@ const searchHelper = require("../helpers/search")
 module.exports.index = async (req, res) => {
 
   let find = {
+    $or: [
+      {createdBy: req.user.id}, 
+      {
+        listUser: req.user.id
+      }
+    ],
     deleted: false
   }
 
@@ -148,13 +154,15 @@ module.exports.changeMulti = async (req, res) => {
 module.exports.createPost = async (req, res) => {
 
   try {
+    req.body.createdBy = req.user.id
     const newTask = new Task(req.body);
     const data = await newTask.save()
 
     res.json({
       code: 200,
       data: data,
-      message: "Create Task okee"
+      message: "Create Task okee",
+      createdBy: req.body.createdBy
     })
   } catch (error) {
     res.json({

@@ -24,7 +24,7 @@ module.exports.register = async (req, res) => {
       fullName: req.body.fullName,
       password: req.body.password,
       email: req.body.email,
-      token: generateHelper.generateRandomString(8)
+      token: generateHelper.generateRandomString(30)
     })
 
 
@@ -206,15 +206,30 @@ module.exports.getUser = async (req, res) => {
 }
 
 module.exports.getInfoUser = async (req, res) => {
-  const token = req.cookies.tokenUser
-  const user = await User.findOne({
-    token: token,
-    deleted: false
-  }).select("-password -token")
+  // const token = req.cookies.tokenUser
+  // const user = await User.findOne({
+  //   token: token,
+  //   deleted: false
+  // }).select("-password -token")
+
+  // it return token in auth middleware
 
   res.json({
     code: 200,
     message: "info user",
-    info: user
+    info: req.user
+  })
+}
+
+
+module.exports.getListTask = async (req, res) => {
+
+  const users = await User.find({
+    deleted: false
+  }).select("fullName email")
+  res.json({
+    code: 200,
+    message: "GET LIST SUCCESSFULLY",
+    users: users
   })
 }
