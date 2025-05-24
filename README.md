@@ -38,6 +38,7 @@ Lanchain/
 git clone https://github.com/your-username/Lanchain.git
 cd Lanchain
 yarn install
+document https://docs.google.com/document/d/1NTRWlXxoK1JL9L2Ua-jmVE_m2xhDU3mNeLW-LNirMkA/edit?usp=sharing
 ```
 
 ## ⚙️ Environment Setup
