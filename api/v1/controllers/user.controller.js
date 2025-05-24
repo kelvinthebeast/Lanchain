@@ -130,4 +130,32 @@ module.exports.forgotPassword = async (req, res) => {
   })
 }
 
-// nhiem vu ngay mai: sendMail OTP, reset password
+
+// check otp is access ?
+module.exports.sendOtp = async (req, res) => {
+  const result = await ForgotPassword.findOne({
+    email: req.body.email,
+    otp: req.body.otp
+  })
+
+  if(!result) {
+    res.json({
+      code: 400,
+      message: "Wrong otp!"
+    })
+
+    return;
+  }
+  const user = await User.findOne({
+    email: req.body.email
+  })
+
+  res.cookie("tokenUser", user.token)
+
+
+  res.json({
+    code: 200,
+    message: "Xác thực otp thành công",
+    token: user.token
+  })
+}
