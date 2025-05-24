@@ -159,3 +159,39 @@ module.exports.sendOtp = async (req, res) => {
     token: user.token
   })
 }
+// [post] /api/v1/forgot-password/reset
+module.exports.getNewPassWord = async (req, res) => {
+  const needToResetPasswordUser = await User.findOne({
+    token: req.body.token
+  }) 
+
+  if (!needToResetPasswordUser) 
+  {
+    return res.status(404).json({
+      code: 404,
+      message: "Token không hợp lệ hoặc người dùng không tồn tại"
+    });
+  }
+
+  
+  if (md5(req.body.password) === needToResetPasswordUser.password) {
+    res.json({
+
+      code: 400,
+      message: "Mật khẩu trùng với mật khẩu cũ"
+    })
+    return;
+  }
+
+  await User.updateOne({
+    token: req.body.token
+  },{
+    password: md5(req.body.password)
+  })
+
+  res.cookie("tokenUser", needToResetPasswordUser.token)
+  res.json({
+    code: 200,
+    message: "Cập nhật mật khẩu thành công"
+  })
+}
