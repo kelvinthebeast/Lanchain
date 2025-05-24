@@ -27,7 +27,7 @@ module.exports.register = async (req, res) => {
     })
 
 
-    user.save()
+    await user.save()
 
     const token = user.token
 
@@ -45,7 +45,8 @@ module.exports.register = async (req, res) => {
 module.exports.login = async (req, res) => {
   const user = await User.findOne({
     email: req.body.email,
-    password: md5(req.body.password)
+    password: md5(req.body.password),
+    deleted: false
   })
 
   if(!user) {
@@ -57,14 +58,7 @@ module.exports.login = async (req, res) => {
     return;
   }
 
-  if(md5(req.body.password) !== user.password) {
-    res.json({
-      code: 400,
-      message: "sai mật khẩu!!"
-    })
-
-
-  }
+  
   res.cookie("tokenUser", user.token)
   res.json({
     code: 200,
@@ -163,6 +157,7 @@ module.exports.sendOtp = async (req, res) => {
 module.exports.getNewPassWord = async (req, res) => {
   const needToResetPasswordUser = await User.findOne({
     token: req.body.token
+    // token: req.cookies.tokenUser
   }) 
 
   if (!needToResetPasswordUser) 
@@ -173,7 +168,7 @@ module.exports.getNewPassWord = async (req, res) => {
     });
   }
 
-  
+
   if (md5(req.body.password) === needToResetPasswordUser.password) {
     res.json({
 
@@ -193,5 +188,32 @@ module.exports.getNewPassWord = async (req, res) => {
   res.json({
     code: 200,
     message: "Cập nhật mật khẩu thành công"
+  })
+}
+
+module.exports.getUser = async (req, res) => {
+  const users = await User.find({
+    deleted: false
+  })
+
+  res.json({
+    code: 200,
+    message: "RETURN ALL USER",
+    users: users
+
+  })
+}
+
+module.exports.getInfoUser = async (req, res) => {
+  const token = req.cookies.tokenUser
+  const user = await User.findOne({
+    token: token,
+    deleted: false
+  }).select("-password -token")
+
+  res.json({
+    code: 200,
+    message: "info user",
+    info: user
   })
 }
